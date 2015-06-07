@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - @46.101.155.168" uuid="358252cb-0e4c-4d50-b7f9-051799d26579">
+    <database-info product="MySQL" version="5.5.43-0ubuntu0.14.04.1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="municipality"/>
+    <table name="actions" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="sol_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="notes" sqlType="VARCHAR" precision="256" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="actions_ibfk_1" columns="sol_id" ref-table="solutions" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="answers" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="query_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="reg_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="answer" sqlType="VARCHAR" precision="256" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="answers_ibfk_1" columns="query_id" ref-table="queries" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+    <table name="citizens" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="lname" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
+      <column name="fname" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="pass_no" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="address" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="queries_ibfk_1" table="queries" schema="" catalog="municipality" columns="citizen_id"/>
+    </table>
+    <table name="departments" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="employees_ibfk_1" table="employees" schema="" catalog="municipality" columns="dep_id"/>
+      <exported-key name="query_types_ibfk_1" table="query_types" schema="" catalog="municipality" columns="dep_id"/>
+    </table>
+    <table name="employees" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="lname" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
+      <column name="fname" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="dep_id" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="employees_ibfk_1" columns="dep_id" ref-table="departments" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="queries_ibfk_4" table="queries" schema="" catalog="municipality" columns="emp_id"/>
+    </table>
+    <table name="queries" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="citizen_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="query_type_id" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="sol_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="emp_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="reg_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="end_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="queries_ibfk_1" columns="citizen_id" ref-table="citizens" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="queries_ibfk_2" columns="query_type_id" ref-table="query_types" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="queries_ibfk_3" columns="sol_id" ref-table="solutions" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="queries_ibfk_4" columns="emp_id" ref-table="employees" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="answers_ibfk_1" table="answers" schema="" catalog="municipality" columns="query_id"/>
+    </table>
+    <table name="query_types" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
+      <column name="dep_id" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="query_types_ibfk_1" columns="dep_id" ref-table="departments" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="queries_ibfk_2" table="queries" schema="" catalog="municipality" columns="query_type_id"/>
+    </table>
+    <table name="solutions" schema="" catalog="municipality" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="exec_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="protocol_path" sqlType="VARCHAR" precision="256" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="actions_ibfk_1" table="actions" schema="" catalog="municipality" columns="sol_id"/>
+      <exported-key name="queries_ibfk_3" table="queries" schema="" catalog="municipality" columns="sol_id"/>
+    </table>
+  </data-source>
+</component>
