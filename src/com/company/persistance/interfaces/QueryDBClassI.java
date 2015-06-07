@@ -1,13 +1,14 @@
 package com.company.persistance.interfaces;
 
 import javax.management.Query;
+import java.sql.SQLException;
 
 public interface QueryDBClassI {
-    void getAnswer(int id);
+    Query getQuery(int id) throws SQLException;
 
-    void createAnswer(Query query);
+    int createQuery(Query query) throws SQLException;
 
-    void deleteAnswer(int id);
+    int deleteQuery(int id) throws SQLException;
 
-    void updateAnswer(Query query);
+    int updateQuery(Query query) throws SQLException;
 }

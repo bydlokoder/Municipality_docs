@@ -2,12 +2,14 @@ package com.company.persistance.interfaces;
 
 import com.company.entities.QueryType;
 
+import java.sql.SQLException;
+
 public interface QueryTypeDBClassI {
-    void getAnswer(int id);
+    QueryType getQueryType(int id) throws SQLException;
 
-    void createAnswer(QueryType type);
+    int createQueryType(QueryType query) throws SQLException;
 
-    void deleteAnswer(int id);
+    int deleteQueryType(int id) throws SQLException;
 
-    void updateAnswer(QueryType type);
+    int updateQueryType(QueryType query) throws SQLException;
 }

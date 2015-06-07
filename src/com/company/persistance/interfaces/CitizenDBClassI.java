@@ -2,12 +2,14 @@ package com.company.persistance.interfaces;
 
 import com.company.entities.Citizen;
 
+import java.sql.SQLException;
+
 public interface CitizenDBClassI {
-    void getAnswer(int id);
+    Citizen getCitizen(int id) throws SQLException;
 
-    void createAnswer(Citizen citizen);
+    int createCitizen(Citizen citizen)throws SQLException;
 
-    void deleteAnswer(int id);
+    int deleteCitizen(int id)throws SQLException;
 
-    void updateAnswer(Citizen citizen);
+    int updateCitizen(Citizen citizen)throws SQLException;
 }
