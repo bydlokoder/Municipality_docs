@@ -9,7 +9,7 @@ public interface AnswerDBClassI {
 
     int createAnswer(Answer answer) throws SQLException;
 
-    void deleteAnswer(int id);
+    int deleteAnswer(int id) throws SQLException;
 
-    void updateAnswer(Answer answer);
+    int updateAnswer(Answer answer) throws SQLException;
 }

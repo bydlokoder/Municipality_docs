@@ -38,12 +38,24 @@ public class AnswerDBClassImpl implements AnswerDBClassI {
     }
 
     @Override
-    public void deleteAnswer(int id) {
-
+    public int deleteAnswer(int id) throws SQLException {
+        String delAnswerSQL = "DELETE * FROM answers WHERE id=?";
+        Connection connection = DBManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(delAnswerSQL);
+        statement.setInt(1, id);
+        return statement.executeUpdate();
     }
 
     @Override
-    public void updateAnswer(Answer answer) {
-
+    public int updateAnswer(Answer answer) throws SQLException {
+        String updateAnswerSQL = "UPDATE answers SET " + Answer.COLUMN_QUERY_ID + "=?, " + Answer.COLUMN_ANSWER + "=?, "
+                + Answer.COLUMN_REG_DATE + "=? WHERE id=?";
+        Connection connection = DBManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(updateAnswerSQL);
+        statement.setInt(1, answer.getQueryId());
+        statement.setString(2, answer.getAnswer());
+        statement.setDate(3, answer.getRegDate());
+        statement.setInt(4, answer.getId());
+        return statement.executeUpdate();
     }
 }
