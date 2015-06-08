@@ -1,6 +1,6 @@
 package com.company.persistance.interfaces;
 
-import javax.management.Query;
+import com.company.entities.Query;
 import java.sql.SQLException;
 
 public interface QueryDBClassI {
