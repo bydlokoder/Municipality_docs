@@ -1,7 +1,6 @@
 package com.company.entities;
 
-public class Department
-{
+public class Department {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
 
