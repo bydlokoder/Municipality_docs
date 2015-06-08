@@ -9,10 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CitizenDBClassImpl implements CitizenDBClassI {
+    public static final String CITIZENS_TABLE = "citizens";
     @Override
     public Citizen getCitizen(int id) throws SQLException {
         Citizen result = null;
-        String sql = "SELECT * FROM citizens WHERE id=?";
+        String sql = String.format("SELECT * FROM %s WHERE %s=?", CITIZENS_TABLE, Citizen.COLUMN_ID);
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -30,9 +31,7 @@ public class CitizenDBClassImpl implements CitizenDBClassI {
 
     @Override
     public int createCitizen(Citizen citizen) throws SQLException {
-        String insertCitizenSQL = "INSERT INTO citizens" + "(" + Citizen.COLUMN_LAST_NAME + ","
-                + Citizen.COLUMN_FIRST_NAME + "," + Citizen.COLUMN_PASS_NUM + "," + Citizen.COLUMN_ADDRESS + ")"
-                + " VALUES " + "(?,?,?,?)";
+        String insertCitizenSQL = String.format("INSERT INTO %s(%s,%s,%s,%s) VALUES (?,?,?,?)", CITIZENS_TABLE, Citizen.COLUMN_LAST_NAME, Citizen.COLUMN_FIRST_NAME, Citizen.COLUMN_PASS_NUM, Citizen.COLUMN_ADDRESS);
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(insertCitizenSQL);
         statement.setString(1, citizen.getLastName());
@@ -44,7 +43,7 @@ public class CitizenDBClassImpl implements CitizenDBClassI {
 
     @Override
     public int deleteCitizen(int id) throws SQLException {
-        String delCitizenSQL = "DELETE FROM citizens WHERE id=?";
+        String delCitizenSQL = String.format("DELETE FROM %s WHERE %s=?", CITIZENS_TABLE, Citizen.COLUMN_ID);
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(delCitizenSQL);
         statement.setInt(1, id);
@@ -53,8 +52,7 @@ public class CitizenDBClassImpl implements CitizenDBClassI {
 
     @Override
     public int updateCitizen(Citizen citizen) throws SQLException {
-        String updateAnswerSQL = "UPDATE citizens SET " + Citizen.COLUMN_LAST_NAME + "=?, " + Citizen.COLUMN_FIRST_NAME + "=?, "
-                + Citizen.COLUMN_PASS_NUM + "=?," + Citizen.COLUMN_ADDRESS + "=? WHERE id=?";
+        String updateAnswerSQL = String.format("UPDATE %s SET %s=?, %s=?, %s=?,%s=? WHERE %s=?", CITIZENS_TABLE, Citizen.COLUMN_LAST_NAME, Citizen.COLUMN_FIRST_NAME, Citizen.COLUMN_PASS_NUM, Citizen.COLUMN_ADDRESS, Citizen.COLUMN_ID);
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(updateAnswerSQL);
         statement.setString(1, citizen.getLastName());
