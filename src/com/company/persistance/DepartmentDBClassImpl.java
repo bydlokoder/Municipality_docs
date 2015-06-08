@@ -36,7 +36,11 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
 
     @Override
     public int deleteDepartment(int id) throws SQLException {
-        return 0;
+        String delDepartmentSQL = "DELETE FROM departments WHERE id=?";
+        Connection connection = DBManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(delDepartmentSQL);
+        statement.setInt(1, id);
+        return statement.executeUpdate();
     }
 
     @Override
