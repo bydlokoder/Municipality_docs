@@ -6,12 +6,10 @@ import com.company.persistance.interfaces.QueryDBClassI;
 import java.sql.*;
 
 public class QueryDBClassImpl implements QueryDBClassI {
-    public static final String QUERIES_TABLE = "queries";
-
     @Override
     public Query getQuery(int id) throws SQLException {
         Query result = null;
-        String sql = String.format("SELECT * FROM %s WHERE %s=?", QUERIES_TABLE, Query.COLUMN_ID);
+        String sql = "SELECT * FROM queries WHERE id=?";
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -31,7 +29,9 @@ public class QueryDBClassImpl implements QueryDBClassI {
 
     @Override
     public int createQuery(Query query) throws SQLException {
-        String insertQuerySQL = String.format("INSERT INTO %s(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", QUERIES_TABLE, Query.COLUMN_CITIZEN_ID, Query.COLUMN_QUERYTYPE_ID, Query.COLUMN_SOLUTION_ID, Query.COLUMN_EMPLOYEE_ID, Query.COLUMN_REG_DATE, Query.COLUMN_END_DATE);
+        String insertQuerySQL = "INSERT INTO queries" + "(" + Query.COLUMN_CITIZEN_ID + ","
+                + Query.COLUMN_QUERYTYPE_ID + "," + Query.COLUMN_SOLUTION_ID + "," + Query.COLUMN_EMPLOYEE_ID
+                + "," + Query.COLUMN_REG_DATE + "," + Query.COLUMN_END_DATE + ")" + " VALUES " + "(?,?,?,?,?,?)";
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(insertQuerySQL);
         statement.setInt(1, query.getCitizenId());
@@ -45,7 +45,7 @@ public class QueryDBClassImpl implements QueryDBClassI {
 
     @Override
     public int deleteQuery(int id) throws SQLException {
-        String delQuerySQL = String.format("DELETE FROM %s WHERE %s=?", QUERIES_TABLE, Query.COLUMN_ID);
+        String delQuerySQL = "DELETE FROM queries WHERE id=?";
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(delQuerySQL);
         statement.setInt(1, id);
@@ -54,9 +54,11 @@ public class QueryDBClassImpl implements QueryDBClassI {
 
     @Override
     public int updateQuery(Query query) throws SQLException {
-        String updateAnswerSQL = String.format("UPDATE %s SET %s=?, %s=?, %s=?,%s=?,%s=?,%s=? WHERE %s=?", QUERIES_TABLE, Query.COLUMN_CITIZEN_ID, Query.COLUMN_QUERYTYPE_ID, Query.COLUMN_SOLUTION_ID, Query.COLUMN_EMPLOYEE_ID, Query.COLUMN_REG_DATE, Query.COLUMN_END_DATE, Query.COLUMN_ID);
+        String updateQuerySQL = "UPDATE queries SET " + Query.COLUMN_CITIZEN_ID + "=?, " + Query.COLUMN_QUERYTYPE_ID
+                + "=?, " + Query.COLUMN_SOLUTION_ID + "=?," + Query.COLUMN_EMPLOYEE_ID + "=?," + Query.COLUMN_REG_DATE
+                + "=?," + Query.COLUMN_END_DATE + "=? WHERE id=?";
         Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(updateAnswerSQL);
+        PreparedStatement statement = connection.prepareStatement(updateQuerySQL);
         statement.setInt(1, query.getCitizenId());
         statement.setInt(2, query.getQueryTypeId());
         statement.setInt(3, query.getSolutionId());
