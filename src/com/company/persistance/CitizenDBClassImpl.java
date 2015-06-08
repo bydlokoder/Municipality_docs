@@ -10,58 +10,149 @@ import java.sql.SQLException;
 
 public class CitizenDBClassImpl implements CitizenDBClassI {
     @Override
-    public Citizen getCitizen(int id) throws SQLException {
+    public Citizen getCitizen(int id) {
         Citizen result = null;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String sql = "SELECT * FROM citizens WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, id);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.first()) {
-            int citizenId = resultSet.getInt(Citizen.COLUMN_ID);
-            String lastName = resultSet.getString(Citizen.COLUMN_LAST_NAME);
-            String firstName = resultSet.getString(Citizen.COLUMN_FIRST_NAME);
-            String passNum = resultSet.getString(Citizen.COLUMN_PASS_NUM);
-            String address = resultSet.getString(Citizen.COLUMN_ADDRESS);
-            result = new Citizen(citizenId, lastName, firstName, passNum, address);
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.first()) {
+                int citizenId = resultSet.getInt(Citizen.COLUMN_ID);
+                String lastName = resultSet.getString(Citizen.COLUMN_LAST_NAME);
+                String firstName = resultSet.getString(Citizen.COLUMN_FIRST_NAME);
+                String passNum = resultSet.getString(Citizen.COLUMN_PASS_NUM);
+                String address = resultSet.getString(Citizen.COLUMN_ADDRESS);
+                result = new Citizen(citizenId, lastName, firstName, passNum, address);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return result;
     }
 
     @Override
-    public int createCitizen(Citizen citizen) throws SQLException {
+    public int createCitizen(Citizen citizen) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String insertCitizenSQL = "INSERT INTO citizens" + "(" + Citizen.COLUMN_LAST_NAME + ","
                 + Citizen.COLUMN_FIRST_NAME + "," + Citizen.COLUMN_PASS_NUM + "," + Citizen.COLUMN_ADDRESS + ")"
                 + " VALUES " + "(?,?,?,?)";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(insertCitizenSQL);
-        statement.setString(1, citizen.getLastName());
-        statement.setString(2, citizen.getFirstName());
-        statement.setString(3, citizen.getPassNum());
-        statement.setString(4, citizen.getAddress());
-        return statement.executeUpdate();
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(insertCitizenSQL);
+            statement.setString(1, citizen.getLastName());
+            statement.setString(2, citizen.getFirstName());
+            statement.setString(3, citizen.getPassNum());
+            statement.setString(4, citizen.getAddress());
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 
     @Override
-    public int deleteCitizen(int id) throws SQLException {
+    public int deleteCitizen(int id) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String delCitizenSQL = "DELETE FROM citizens WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(delCitizenSQL);
-        statement.setInt(1, id);
-        return statement.executeUpdate();
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(delCitizenSQL);
+            statement.setInt(1, id);
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 
     @Override
-    public int updateCitizen(Citizen citizen) throws SQLException {
-        String updateCitizenSQL = "UPDATE citizens SET " + Citizen.COLUMN_LAST_NAME + "=?, " + Citizen.COLUMN_FIRST_NAME + "=?, "
-                + Citizen.COLUMN_PASS_NUM + "=?," + Citizen.COLUMN_ADDRESS + "=? WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(updateCitizenSQL);
-        statement.setString(1, citizen.getLastName());
-        statement.setString(2, citizen.getFirstName());
-        statement.setString(3, citizen.getPassNum());
-        statement.setString(4, citizen.getAddress());
-        statement.setInt(5, citizen.getId());
-        return statement.executeUpdate();
+    public int updateCitizen(Citizen citizen) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String updateCitizenSQL = "UPDATE citizens SET " + Citizen.COLUMN_LAST_NAME + "=?, "
+                + Citizen.COLUMN_FIRST_NAME + "=?, " + Citizen.COLUMN_PASS_NUM + "=?," + Citizen.COLUMN_ADDRESS
+                + "=? WHERE id=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(updateCitizenSQL);
+            statement.setString(1, citizen.getLastName());
+            statement.setString(2, citizen.getFirstName());
+            statement.setString(3, citizen.getPassNum());
+            statement.setString(4, citizen.getAddress());
+            statement.setInt(5, citizen.getId());
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

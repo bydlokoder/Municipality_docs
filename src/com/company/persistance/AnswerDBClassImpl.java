@@ -7,55 +7,145 @@ import java.sql.*;
 
 public class AnswerDBClassImpl implements AnswerDBClassI {
     @Override
-    public Answer getAnswer(int id) throws SQLException {
+    public Answer getAnswer(int id) {
         Answer result = null;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String sql = "SELECT * FROM answers WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, id);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.first()) {
-            int answerId = resultSet.getInt(Answer.COLUMN_ID);
-            int queryID = resultSet.getInt(Answer.COLUMN_QUERY_ID);
-            String answer = resultSet.getString(Answer.COLUMN_ANSWER);
-            Date regDate = resultSet.getDate(Answer.COLUMN_REG_DATE);
-            result = new Answer(answerId, queryID, answer, regDate);
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.first()) {
+                int answerId = resultSet.getInt(Answer.COLUMN_ID);
+                int queryID = resultSet.getInt(Answer.COLUMN_QUERY_ID);
+                String answer = resultSet.getString(Answer.COLUMN_ANSWER);
+                Date regDate = resultSet.getDate(Answer.COLUMN_REG_DATE);
+                result = new Answer(answerId, queryID, answer, regDate);
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return result;
     }
 
     @Override
-    public int createAnswer(Answer answer) throws SQLException {
+    public int createAnswer(Answer answer) {
+        int result = 0;
         String insertAnswerSQL = "INSERT INTO answers" + "(" + Answer.COLUMN_QUERY_ID + ","
                 + Answer.COLUMN_REG_DATE + "," + Answer.COLUMN_ANSWER + ")" + " VALUES "
                 + "(?,?,?)";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(insertAnswerSQL);
-        statement.setInt(1, answer.getQueryId());
-        statement.setDate(2, answer.getRegDate());
-        statement.setString(3, answer.getAnswer());
-        return statement.executeUpdate();
+        PreparedStatement statement = null;
+        Connection connection = null;
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(insertAnswerSQL);
+            statement.setInt(1, answer.getQueryId());
+            statement.setDate(2, answer.getRegDate());
+            statement.setString(3, answer.getAnswer());
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 
     @Override
-    public int deleteAnswer(int id) throws SQLException {
+    public int deleteAnswer(int id) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String delAnswerSQL = "DELETE FROM answers WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(delAnswerSQL);
-        statement.setInt(1, id);
-        return statement.executeUpdate();
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(delAnswerSQL);
+            statement.setInt(1, id);
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 
     @Override
-    public int updateAnswer(Answer answer) throws SQLException {
+    public int updateAnswer(Answer answer) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
         String updateAnswerSQL = "UPDATE answers SET " + Answer.COLUMN_QUERY_ID + "=?, " + Answer.COLUMN_ANSWER + "=?, "
                 + Answer.COLUMN_REG_DATE + "=? WHERE id=?";
-        Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(updateAnswerSQL);
-        statement.setInt(1, answer.getQueryId());
-        statement.setString(2, answer.getAnswer());
-        statement.setDate(3, answer.getRegDate());
-        statement.setInt(4, answer.getId());
-        return statement.executeUpdate();
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(updateAnswerSQL);
+            statement.setInt(1, answer.getQueryId());
+            statement.setString(2, answer.getAnswer());
+            statement.setDate(3, answer.getRegDate());
+            statement.setInt(4, answer.getId());
+            result = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }
