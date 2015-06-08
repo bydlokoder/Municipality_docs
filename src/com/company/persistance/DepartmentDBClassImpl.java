@@ -45,6 +45,11 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
 
     @Override
     public int updateDepartment(Department department) throws SQLException {
-        return 0;
+        String updateDepartmentSQL = "UPDATE departments SET " + Department.COLUMN_NAME + "=? WHERE id=?";
+        Connection connection = DBManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(updateDepartmentSQL);
+        statement.setString(1, department.getName());
+        statement.setInt(2, department.getId());
+        return statement.executeUpdate();
     }
 }
