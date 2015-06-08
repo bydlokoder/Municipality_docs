@@ -20,5 +20,6 @@ public class DBManager {
     private static void initialize() throws SQLException {
         DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         connection = DriverManager.getConnection(CONNECTION_URL, USERNAME, PASSWORD);
+        connection.setAutoCommit(false);
     }
 }
