@@ -53,10 +53,10 @@ public class CitizenDBClassImpl implements CitizenDBClassI {
 
     @Override
     public int updateCitizen(Citizen citizen) throws SQLException {
-        String updateAnswerSQL = "UPDATE citizens SET " + Citizen.COLUMN_LAST_NAME + "=?, " + Citizen.COLUMN_FIRST_NAME + "=?, "
+        String updateCitizenSQL = "UPDATE citizens SET " + Citizen.COLUMN_LAST_NAME + "=?, " + Citizen.COLUMN_FIRST_NAME + "=?, "
                 + Citizen.COLUMN_PASS_NUM + "=?," + Citizen.COLUMN_ADDRESS + "=? WHERE id=?";
         Connection connection = DBManager.getConnection();
-        PreparedStatement statement = connection.prepareStatement(updateAnswerSQL);
+        PreparedStatement statement = connection.prepareStatement(updateCitizenSQL);
         statement.setString(1, citizen.getLastName());
         statement.setString(2, citizen.getFirstName());
         statement.setString(3, citizen.getPassNum());
