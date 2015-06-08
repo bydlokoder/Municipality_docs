@@ -39,7 +39,7 @@ public class AnswerDBClassImpl implements AnswerDBClassI {
 
     @Override
     public int deleteAnswer(int id) throws SQLException {
-        String delAnswerSQL = "DELETE * FROM answers WHERE id=?";
+        String delAnswerSQL = "DELETE FROM answers WHERE id=?";
         Connection connection = DBManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(delAnswerSQL);
         statement.setInt(1, id);
