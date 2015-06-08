@@ -27,7 +27,11 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
 
     @Override
     public int createDepartment(Department department) throws SQLException {
-        return 0;
+        String insertDepartmentSQL = "INSERT INTO departments" + "(" + Department.COLUMN_NAME + ")" + " VALUES " + "(?)";
+        Connection connection = DBManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(insertDepartmentSQL);
+        statement.setString(1, department.getName());
+        return statement.executeUpdate();
     }
 
     @Override
