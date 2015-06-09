@@ -2,14 +2,12 @@ package com.company.persistance.interfaces;
 
 import com.company.entities.Department;
 
-import java.sql.SQLException;
-
 public interface DepartmentDBClassI {
-    Department getDepartment(int id) throws SQLException;
+    Department getDepartment(int id);
 
-    int createDepartment(Department department) throws SQLException;
+    int createDepartment(Department department);
 
-    int deleteDepartment(int id) throws SQLException;
+    int deleteDepartment(int id);
 
-    int updateDepartment(Department department) throws SQLException;
+    int updateDepartment(Department department);
 }

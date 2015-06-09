@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class DepartmentDBClassImpl implements DepartmentDBClassI {
     @Override
-    public Department getDepartment(int id) throws SQLException {
+    public Department getDepartment(int id) {
         Department result = null;
         PreparedStatement statement = null;
         Connection connection = null;
@@ -47,7 +47,7 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
     }
 
     @Override
-    public int createDepartment(Department department) throws SQLException {
+    public int createDepartment(Department department) {
         String insertDepartmentSQL = "INSERT INTO departments" + "(" + Department.COLUMN_NAME + ")" + " VALUES " + "(?)";
         PreparedStatement statement = null;
         Connection connection = null;
@@ -79,7 +79,7 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
     }
 
     @Override
-    public int deleteDepartment(int id) throws SQLException {
+    public int deleteDepartment(int id) {
         PreparedStatement statement = null;
         Connection connection = null;
         int result = 0;
@@ -111,7 +111,7 @@ public class DepartmentDBClassImpl implements DepartmentDBClassI {
     }
 
     @Override
-    public int updateDepartment(Department department) throws SQLException {
+    public int updateDepartment(Department department) {
         PreparedStatement statement = null;
         Connection connection = null;
         int result = 0;
