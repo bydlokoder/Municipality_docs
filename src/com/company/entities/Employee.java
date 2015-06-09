@@ -30,11 +30,11 @@ public class Employee {
         return depId;
     }
 
-    public String getfName() {
+    public String getFName() {
         return fName;
     }
 
-    public String getlName() {
+    public String getLName() {
         return lName;
     }
 }
