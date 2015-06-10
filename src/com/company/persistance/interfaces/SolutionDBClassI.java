@@ -10,4 +10,6 @@ public interface SolutionDBClassI {
     int deleteSolution(int id);
 
     int updateSolution(Solution solution);
+
+    Solution getSolutionByQuery(int queryId);
 }

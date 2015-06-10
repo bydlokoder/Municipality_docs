@@ -4,6 +4,8 @@ import com.company.entities.Answer;
 import com.company.persistance.interfaces.AnswerDBClassI;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnswerDBClassImpl implements AnswerDBClassI {
     @Override
@@ -129,6 +131,45 @@ public class AnswerDBClassImpl implements AnswerDBClassI {
             statement.setInt(4, answer.getId());
             result = statement.executeUpdate();
             connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Answer> getAnswerListByQuery(int queryId) {
+        List<Answer> result = new ArrayList<>();
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT * FROM answers a WHERE a.query_id=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, queryId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int answerId = resultSet.getInt(Answer.COLUMN_ID);
+                int queryID = resultSet.getInt(Answer.COLUMN_QUERY_ID);
+                String answer = resultSet.getString(Answer.COLUMN_ANSWER);
+                Date regDate = resultSet.getDate(Answer.COLUMN_REG_DATE);
+                result.add(new Answer(answerId, queryID, answer, regDate));
+                connection.commit();
+            }
         } catch (SQLException e) {
             if (connection != null) {
                 try {
