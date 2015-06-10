@@ -10,8 +10,8 @@
     <table name="actions" schema="" catalog="municipality" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="sol_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="name" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
-      <column name="notes" sqlType="VARCHAR" precision="256" scale="0" nullable="true" jdbcType="12"/>
+      <column name="name" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="notes" sqlType="VARCHAR" precision="256" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
       <foreign-key name="actions_ibfk_1" columns="sol_id" ref-table="solutions" ref-schema="" ref-catalog="municipality" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
     </table>
@@ -31,6 +31,7 @@
       <column name="address" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="queries_ibfk_1" table="queries" schema="" catalog="municipality" columns="citizen_id"/>
+      <index name="pass_no" unique="true" columns="pass_no"/>
     </table>
     <table name="departments" schema="" catalog="municipality" type="TABLE">
       <column name="id" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5" autoIncrement="true"/>
@@ -54,6 +55,7 @@
       <column name="query_type_id" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
       <column name="sol_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="emp_id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="status" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
       <column name="reg_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
       <column name="end_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
       <primary-key name="PRIMARY" columns="id"/>
@@ -73,8 +75,8 @@
     </table>
     <table name="solutions" schema="" catalog="municipality" type="TABLE">
       <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="exec_date" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
-      <column name="protocol_path" sqlType="VARCHAR" precision="256" scale="0" nullable="true" jdbcType="12"/>
+      <column name="exec_date" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="protocol_path" sqlType="VARCHAR" precision="256" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="actions_ibfk_1" table="actions" schema="" catalog="municipality" columns="sol_id"/>
       <exported-key name="queries_ibfk_3" table="queries" schema="" catalog="municipality" columns="sol_id"/>

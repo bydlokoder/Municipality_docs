@@ -143,4 +143,43 @@ public class SolutionDBClassImpl implements SolutionDBClassI {
         }
         return result;
     }
+
+    @Override
+    public Solution getSolutionByQuery(int queryId) {
+        Solution result = null;
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT * FROM solutions s, queries q WHERE q.sol_id =? AND s.id=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, queryId);
+            statement.setInt(2, queryId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.first()) {
+                int solutionId = resultSet.getInt(Solution.COLUMN_ID);
+                Date execDate = resultSet.getDate(Solution.COLUMN_EXEC_DATE);
+                String protocolPath = resultSet.getString(Solution.COLUMN_PROTOCOL_PATH);
+                result = new Solution(solutionId, execDate, protocolPath);
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
 }
