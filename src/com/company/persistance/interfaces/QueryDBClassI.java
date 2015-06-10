@@ -14,4 +14,12 @@ public interface QueryDBClassI {
     int updateQuery(Query query);
 
     List<Query> getQueryListForCitizen(int citizenId);
+
+    List<Query> getQueryListWithStatus(String status);
+
+    List<Query> getExpiredQueryList();
+
+    List<Query> getQueryListAssignedTo(int employeeId);
+
+    int getQueriesNumForDepartmentWithStatus(int departmentId, String string);
 }

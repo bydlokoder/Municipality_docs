@@ -11,6 +11,7 @@ public class Query {
     public static final String COLUMN_EMPLOYEE_ID = "emp_id";
     public static final String COLUMN_REG_DATE = "reg_date";
     public static final String COLUMN_END_DATE = "end_date";
+    public static final String COLUMN_STATUS = "status";
 
     private int id;
     private int citizenId;
@@ -19,9 +20,10 @@ public class Query {
     private int employeeId;
     private Date registerDate;
     private Date endDate;
+    private String status;
 
     public Query(int id, int citizenId, int queryTypeId, int solutionId,
-                 int employeeId, Date registerDate, Date endDate) {
+                 int employeeId, Date registerDate, Date endDate, String status) {
         this.id = id;
         this.citizenId = citizenId;
         this.queryTypeId = queryTypeId;
@@ -29,15 +31,18 @@ public class Query {
         this.employeeId = employeeId;
         this.registerDate = registerDate;
         this.endDate = endDate;
+        this.status = status;
     }
 
-    public Query(int citizenId, int queryTypeId, int solutionId, int employeeId, Date registerDate, Date endDate) {
+    public Query(int citizenId, int queryTypeId, int solutionId, int employeeId, Date registerDate, Date endDate,
+                 String status) {
         this.citizenId = citizenId;
         this.queryTypeId = queryTypeId;
         this.solutionId = solutionId;
         this.employeeId = employeeId;
         this.registerDate = registerDate;
         this.endDate = endDate;
+        this.status = status;
     }
 
     public int getId() {

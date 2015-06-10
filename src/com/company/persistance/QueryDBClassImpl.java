@@ -27,7 +27,8 @@ public class QueryDBClassImpl implements QueryDBClassI {
                 int employeeId = resultSet.getInt(Query.COLUMN_EMPLOYEE_ID);
                 Date registerDate = resultSet.getDate(Query.COLUMN_REG_DATE);
                 Date endDate = resultSet.getDate(Query.COLUMN_END_DATE);
-                result = new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate);
+                String status = resultSet.getString(Query.COLUMN_STATUS);
+                result = new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate, status);
             }
             connection.commit();
         } catch (SQLException e) {
@@ -179,7 +180,8 @@ public class QueryDBClassImpl implements QueryDBClassI {
                 int employeeId = resultSet.getInt(Query.COLUMN_EMPLOYEE_ID);
                 Date registerDate = resultSet.getDate(Query.COLUMN_REG_DATE);
                 Date endDate = resultSet.getDate(Query.COLUMN_END_DATE);
-                result.add(new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate));
+                String status = resultSet.getString(Query.COLUMN_STATUS);
+                result.add(new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate, status));
             }
             connection.commit();
         } catch (SQLException e) {
@@ -201,4 +203,175 @@ public class QueryDBClassImpl implements QueryDBClassI {
         }
         return result;
     }
+
+    @Override
+    public List<Query> getQueryListWithStatus(String status) {
+        List<Query> result = new ArrayList<>();
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT * FROM queries q WHERE q.status=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, status);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int queryId = resultSet.getInt(Query.COLUMN_ID);
+                int citizenId = resultSet.getInt(Query.COLUMN_CITIZEN_ID);
+                int queryTypeId = resultSet.getInt(Query.COLUMN_QUERYTYPE_ID);
+                int solutionId = resultSet.getInt(Query.COLUMN_SOLUTION_ID);
+                int employeeId = resultSet.getInt(Query.COLUMN_EMPLOYEE_ID);
+                Date registerDate = resultSet.getDate(Query.COLUMN_REG_DATE);
+                Date endDate = resultSet.getDate(Query.COLUMN_END_DATE);
+                result.add(new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate, status));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Query> getExpiredQueryList() {
+        List<Query> result = new ArrayList<>();
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT *\n" +
+                "FROM queries q\n" +
+                "WHERE IFNULL((SELECT reg_date\n" +
+                "              FROM answers a\n" +
+                "              WHERE a.query_id = q.id\n" +
+                "              ORDER BY reg_date\n" +
+                "              LIMIT 1), CURRENT_DATE) > q.end_date";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int queryId = resultSet.getInt(Query.COLUMN_ID);
+                int citizenId = resultSet.getInt(Query.COLUMN_CITIZEN_ID);
+                int queryTypeId = resultSet.getInt(Query.COLUMN_QUERYTYPE_ID);
+                int solutionId = resultSet.getInt(Query.COLUMN_SOLUTION_ID);
+                int employeeId = resultSet.getInt(Query.COLUMN_EMPLOYEE_ID);
+                Date registerDate = resultSet.getDate(Query.COLUMN_REG_DATE);
+                Date endDate = resultSet.getDate(Query.COLUMN_END_DATE);
+                String status = resultSet.getString(Query.COLUMN_STATUS);
+                result.add(new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate, status));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Query> getQueryListAssignedTo(int employeeId) {
+        List<Query> result = new ArrayList<>();
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT * FROM queries q WHERE q.emp_id=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, employeeId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int queryId = resultSet.getInt(Query.COLUMN_ID);
+                int citizenId = resultSet.getInt(Query.COLUMN_CITIZEN_ID);
+                int queryTypeId = resultSet.getInt(Query.COLUMN_QUERYTYPE_ID);
+                int solutionId = resultSet.getInt(Query.COLUMN_SOLUTION_ID);
+                Date registerDate = resultSet.getDate(Query.COLUMN_REG_DATE);
+                Date endDate = resultSet.getDate(Query.COLUMN_END_DATE);
+                String status = resultSet.getString(Query.COLUMN_STATUS);
+                result.add(new Query(queryId, citizenId, queryTypeId, solutionId, employeeId, registerDate, endDate, status));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int getQueriesNumForDepartmentWithStatus(int departmentId, String status) {
+        int result = 0;
+        PreparedStatement statement = null;
+        Connection connection = null;
+        String sql = "SELECT count(*) num FROM queries q, query_types t " +
+                "WHERE q.query_type_id=t.id AND t.dep_id=? AND q.status=?";
+        try {
+            connection = DBManager.getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, departmentId);
+            statement.setString(2, status);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.first()) {
+                result = resultSet.getInt("num");
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+
 }
