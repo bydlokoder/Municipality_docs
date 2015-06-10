@@ -72,4 +72,8 @@ public class Query {
     public Date getEndDate() {
         return endDate;
     }
+
+    public String getStatus() {
+        return status;
+    }
 }
